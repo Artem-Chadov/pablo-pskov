@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Пабло — гастропаб в Пскове · Пенное и кухня</title>
+<meta name="description" content="Пабло — гастропаб и спортбар в Пскове, Западная 1. Рейтинг 5,0 на Яндекс Картах. Пенное, кухня, спортивные трансляции, летняя веранда, деловые обеды с 13:00.">
+<meta name="theme-color" content="#0B0A09">
+<meta property="og:title" content="Пабло — гастропаб в Пскове">
+<meta property="og:description" content="Пенное и кухня. Западная, 1. Рейтинг 5,0 · 593 оценки.">
+<meta property="og:image" content="img/vk/vk-22.jpg">
+<link rel="preload" href="assets/fonts/unbounded-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/manrope-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23D8452A'/><text x='16' y='23' font-size='20' font-family='sans-serif' font-weight='700' fill='%23F3ECE1' text-anchor='middle'>П</text></svg>">
+</head>
+<body>
+
+<!-- Возрастная заглушка. Видима по умолчанию из разметки и CSS, скрыть её может
+     только скрипт — так она не пропадёт, если что-то пойдёт не так с JS или классами.
+     sessionStorage, а не cookie: отметка «мне есть 18» никого не идентифицирует,
+     и мы не втягиваем сайт в регулирование куки. -->
+<div class="age" id="age" role="dialog" aria-modal="true" aria-labelledby="ageQ">
+  <div class="age__box">
+    <div class="age__logo">Пабло<span>.</span></div>
+    <h1 class="age__q" id="ageQ">Вам есть 18 лет?</h1>
+    <p class="age__d">На сайте есть сведения о напитках, которые продаются только совершеннолетним.</p>
+    <div class="age__btns">
+      <button class="btn" type="button" id="ageYes">Да, мне есть 18</button>
+      <button class="btn btn--ghost" type="button" id="ageNo">Нет</button>
+    </div>
+    <p class="age__note">Чрезмерное употребление алкоголя вредит вашему здоровью.</p>
+  </div>
+</div>
+
+<!-- фон: слои атмосферы -->
+<div class="bg" aria-hidden="true">
+  <div class="bg__photo"></div>
+  <div class="bg__glow bg__glow--a"></div>
+  <div class="bg__glow bg__glow--b"></div>
+  <div class="bg__lights"></div>
+  <div class="bg__grain"></div>
+</div>
+
+<a class="skip" href="#menu">К меню</a>
+
+<header class="hdr" id="hdr">
+  <a class="logo" href="#top" aria-label="Пабло — на главную">
+    <span class="logo__mark">Пабло</span>
+    <span class="logo__sub">пенное и кухня</span>
+  </a>
+  <nav class="nav" aria-label="Основная навигация">
+    <a href="#place">Место</a>
+    <a href="#menu">Кухня</a>
+    <a href="#bar">Бар</a>
+    <a href="#lunch">Обеды</a>
+    <a href="#gallery">Атмосфера</a>
+    <a href="#reviews">Отзывы</a>
+    <a href="#contacts">Контакты</a>
+  </nav>
+  <div class="hdr__cta">
+    <a class="phone" href="tel:+79211155113">+7 921 115-51-13</a>
+    <a class="btn btn--sm" href="#book">Бронь стола</a>
+  </div>
+  <button class="burger" id="burger" aria-label="Меню навигации" aria-expanded="false"><span></span><span></span><span></span></button>
+</header>
+
+<main id="top">
+
+<!-- ─────────── HERO ─────────── -->
+<section class="hero">
+  <div class="hero__media">
+    <img src="img/vk/vk-17.jpg" alt="Зал гастропаба «Пабло»: роспись с Катриной, барная стойка и столики" fetchpriority="high">
+  </div>
+  <div class="hero__inner">
+    <div class="hero__badge">
+      <span class="stars" aria-hidden="true">★★★★★</span>
+      <b>5,0</b><span class="hero__badge-sep"></span>593 оценки на Яндекс Картах
+    </div>
+
+    <h1 class="hero__title">
+      <span class="hero__word">Пабло</span>
+      <span class="hero__tag">пенное&nbsp;и&nbsp;кухня</span>
+    </h1>
+
+    <p class="hero__lead">
+      Гастропаб и спортбар в Завеличье. Кухня на стыке Мексики и гриля, барная карта
+      и большие экраны, на которых идёт <b>любой</b> матч, который вы попросите.
+    </p>
+
+    <div class="hero__actions">
+      <a class="btn btn--lg" href="#book">Забронировать стол</a>
+      <a class="btn btn--ghost btn--lg" href="#menu">Меню и цены</a>
+    </div>
+
+    <ul class="hero__facts">
+      <li><b>Псков</b><span>Западная, 1</span></li>
+      <li><b id="heroStatus">—</b><span id="heroStatusSub">режим работы</span></li>
+      <li><b>1000–1500 ₽</b><span>средний чек</span></li>
+      <li><b>Спортбар</b><span>трансляции ежедневно</span></li>
+    </ul>
+  </div>
+  <a class="hero__scroll" href="#place" aria-label="Листать вниз"><span></span></a>
+</section>
+
+<!-- ─────────── ПОЧЕМУ ПАБЛО ─────────── -->
+<section class="sec" id="place">
+  <div class="wrap">
+    <div class="sec__head reveal">
+      <span class="eyebrow">01 — О месте</span>
+      <h2 class="h2">Не просто бар.<br><em>Место, куда возвращаются.</em></h2>
+      <p class="sec__lead">
+        Рейтинг <b>5,0</b> по 593 оценкам и 355 отзывов. Чаще всего гости пишут
+        не про еду и не про цены — а про <b>атмосферу</b>: 99% упоминаний положительные.         Её и делаем.
+      </p>
+    </div>
+
+    <div class="feat">
+      <article class="feat__card feat__card--wide reveal">
+        <div class="feat__img"><img loading="lazy" src="img/vk/vk-16.jpg" alt="Барная стойка «Пабло»: кирпичная стена, экран с трансляцией и меловая доска"></div>
+        <div class="feat__body">
+          <h3>Винил, а не плейлист</h3>
+          <p>По вечерам за пультом живой звук: пластинки и тёплый ламповый сет.
+             91% гостей отдельно отмечают музыку.</p>
+        </div>
+      </article>
+
+      <article class="feat__card reveal">
+        <span class="feat__ico">🍺</span>
+        <h3>Полный бар</h3>
+        <p>Разливное, баночное и бутылочное, настойки, коктейли, вино, чай и кофе.
+           Ассортимент меняется — актуальный список на месте.</p>
+        <a class="link" href="#bar">Барная карта →</a>
+      </article>
+
+      <article class="feat__card reveal">
+        <span class="feat__ico">📺</span>
+        <h3>Спортивные трансляции</h3>
+        <p>Большие экраны, трансляции каждый день. Любые матчи — скажите заранее,
+           включим то, что нужно именно вашей компании.</p>
+      </article>
+
+      <article class="feat__card reveal">
+        <span class="feat__ico">🌿</span>
+        <h3>Летняя веранда</h3>
+        <p>Открытая веранда работает в сезон — то же меню и та же атмосфера,
+           только на свежем воздухе.</p>
+      </article>
+
+      <article class="feat__card reveal">
+        <span class="feat__ico">🐕</span>
+        <h3>Можно с собакой</h3>
+        <p>Пёс — тоже компания. Парковка рядом, вход и зал доступны
+           для гостей на коляске, есть пандус.</p>
+      </article>
+
+      <article class="feat__card feat__card--accent reveal">
+        <h3>Компаньонская тарелка</h3>
+        <p>Фирменная закуска на 2–3 персоны — гренки, стрипсы, крылышки, эмпанады и чипсы Пабло.
+           Идеальный старт вечера.</p>
+        <div class="feat__price">790 ₽</div>
+        <a class="link" href="#menu" data-goto-dish="Компаньонская тарелка">Показать в меню →</a>
+      </article>
+    </div>
+
+    <ul class="chips chips--amen reveal">
+      <li>Спортбар</li><li>Гастропаб</li><li>Летняя веранда</li><li>Доставка</li>
+      <li>Еда навынос</li><li>Кофе с собой</li><li>Wi-Fi</li><li>Парковка</li>
+      <li>Оплата картой</li><li>Можно с собакой</li><li>Банкеты</li><li>Корпоративы</li>
+      <li>Дегустации</li><li>Дни рождения</li><li>Деловые встречи</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ─────────── ХИТЫ ─────────── -->
+<section class="sec sec--tight" id="hits">
+  <div class="wrap">
+    <div class="sec__head sec__head--row reveal">
+      <div>
+        <span class="eyebrow">02 — Выбор гостей</span>
+        <h2 class="h2">Что заказывают чаще всего</h2>
+      </div>
+      <a class="link link--big" href="#menu">Всё меню →</a>
+    </div>
+  </div>
+  <div class="rail" id="hitsRail"></div>
+</section>
+
+<!-- ─────────── МЕНЮ ─────────── -->
+<section class="sec sec--menu" id="menu">
+  <div class="wrap">
+    <div class="sec__head reveal">
+      <span class="eyebrow">03 — Кухня</span>
+      <h2 class="h2">Кухня Пабло</h2>
+      <p class="sec__lead">
+        <span id="menuCount">67</span> позиций с ценами и весом — по основному меню заведения.
+        При заказе через доставку стоимость может отличаться.
+      </p>
+    </div>
+
+    <div class="menubar" id="menubar">
+      <div class="menubar__search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input type="search" id="menuSearch" placeholder="Найти блюдо — тако, ребра…" aria-label="Поиск по меню" autocomplete="off">
+        <button type="button" id="menuClear" aria-label="Очистить поиск" hidden>×</button>
+      </div>
+      <div class="menubar__tabs" id="menuTabs" role="tablist" aria-label="Категории меню"></div>
+    </div>
+
+    <div class="menu-grid" id="menuGrid"></div>
+    <p class="menu-empty" id="menuEmpty" hidden>Ничего не нашлось. Попробуйте «пицца», «стейк» или «соус».</p>
+  </div>
+</section>
+
+<!-- ─────────── БАРНАЯ КАРТА ─────────── -->
+<section class="sec sec--bar" id="bar">
+  <div class="wrap">
+    <div class="sec__head reveal">
+      <span class="eyebrow">04 — Бар</span>
+      <h2 class="h2">Барная карта</h2>
+      <p class="sec__lead">
+        Полная карта бара с ценами и объёмами. Ассортимент настоек и разливного
+        меняется — актуальный список уточняйте у официанта.
+      </p>
+    </div>
+
+    <div class="barhi" id="barHi"></div>
+
+    <div class="barlist" id="barList"></div>
+
+    <p class="bar__note reveal">
+      <b>Пивная карта</b> — разливное, баночное и бутылочное — живёт на месте:
+      сорта меняются, актуальный список и цены подскажут за стойкой либо по телефону <a href="tel:+79211155113">+7 921 115-51-13</a>.
+    </p>
+  </div>
+</section>
+
+<!-- ─────────── ДЕЛОВЫЕ ОБЕДЫ ─────────── -->
+<section class="sec" id="lunch">
+  <div class="wrap">
+    <div class="lunch reveal">
+      <div class="lunch__body">
+        <span class="eyebrow eyebrow--light">05 — Будни</span>
+        <h2 class="h2 h2--dark">Деловые обеды<br>с 13:00 до 17:00</h2>
+        <p>Комплекс из трёх блюд с напитком на выбор: чай, вода с лимоном или пиво 0,25.
+           Состав меняется каждый день. Есть доставка.</p>
+        <div class="lunch__menu">
+          <div class="lunch__day">Что входит</div>
+          <ul>
+            <li>Салат</li>
+            <li>Суп</li>
+            <li>Горячее с гарниром</li>
+          </ul>
+          <div class="lunch__meta"><span>около 640 г</span><b>550 ₽</b></div>
+        </div>
+        <!-- Состав дня намеренно не дублируем: заведение постит его во ВКонтакте,
+             а статичный список на сайте протухнет в первый же день. -->
+        <p class="lunch__today">
+          Меню на сегодня — <a href="https://vk.com/pablopskov" target="_blank" rel="noopener">во ВКонтакте</a>
+          или по телефону <a href="tel:+79211155113">+7 921 115-51-13</a>.
+        </p>
+      </div>
+      <div class="lunch__art" aria-hidden="true">
+        <div class="lunch__stamp">13<sup>00</sup><i>—</i>17<sup>00</sup></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── ГАЛЕРЕЯ ─────────── -->
+<section class="sec" id="gallery">
+  <div class="wrap">
+    <div class="sec__head sec__head--row reveal">
+      <div>
+        <span class="eyebrow">06 — Атмосфера</span>
+        <h2 class="h2">Как это выглядит</h2>
+      </div>
+      <a class="link link--big" href="https://vk.com/pablopskov" target="_blank" rel="noopener">Больше во ВКонтакте →</a>
+    </div>
+  </div>
+  <div class="gal" id="gal"></div>
+</section>
+
+<!-- ─────────── ОТЗЫВЫ ─────────── -->
+<section class="sec" id="reviews">
+  <div class="wrap">
+    <div class="sec__head reveal">
+      <span class="eyebrow">07 — Отзывы</span>
+      <h2 class="h2">Говорят гости</h2>
+      <p class="sec__lead">Живые отзывы с Яндекс Карт. Без правок.</p>
+    </div>
+
+    <div class="rev">
+      <article class="rev__card reveal">
+        <div class="rev__stars" aria-label="5 из 5">★★★★★</div>
+        <p>«Кухня необычная. Пиццу пепперони брали детям — колбаска чуть острая, а тесто безумно
+           вкусное. Мороженое на высоте! А картошка фри с беконом и кукурузой — объедение.
+           Персонал вежливый, ожидание небольшое. Антураж — Мексика.»</p>
+        <footer><b>Ина Пылаева</b><span>Знаток города 8 уровня · 26 апреля</span></footer>
+      </article>
+
+      <article class="rev__card reveal">
+        <div class="rev__stars" aria-label="5 из 5">★★★★★</div>
+        <p>«Был приятно очарован местной интерпретацией мексиканской кухни. Всё довольно
+           вкусно и интересно. Неплохая музыка. Отдельный респект повару Софии
+           и администратору Ксении.»</p>
+        <footer><b>Афанасий Крюгер</b><span>Дегустатор 3 уровня · 3 марта</span></footer>
+      </article>
+
+      <article class="rev__card reveal">
+        <div class="rev__stars" aria-label="5 из 5">★★★★★</div>
+        <p>«Отличный персонал, хорошо поболтали. При следующем посещении Пскова
+           обязательно заедем.»</p>
+        <footer><b>Артур Гошев</b><span>Дегустатор 6 уровня · 30 апреля</span></footer>
+      </article>
+    </div>
+
+    <div class="score reveal">
+      <div class="score__big">
+        <b>5,0</b>
+        <span>593 оценки<br>355 отзывов</span>
+      </div>
+      <div class="score__bars" id="scoreBars"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── БРОНЬ + КОНТАКТЫ ─────────── -->
+<section class="sec" id="contacts">
+  <div class="wrap">
+    <div class="sec__head reveal">
+      <span class="eyebrow">08 — Контакты</span>
+      <h2 class="h2">Заходи</h2>
+    </div>
+
+    <div class="cont">
+      <div class="cont__card reveal" id="book">
+        <h3>Бронь стола и заказ</h3>
+        <p class="cont__phone"><a href="tel:+79211155113">+7 921 115-51-13</a></p>
+        <p class="cont__note">Ответим в мессенджере, если звонить неудобно.</p>
+        <div class="cont__soc">
+          <a class="soc soc--vk" href="https://vk.com/pablopskov" target="_blank" rel="noopener"><b>VK</b><span>Сообщество</span></a>
+          <a class="soc soc--tg" href="https://t.me/79211155113" target="_blank" rel="noopener"><b>Telegram</b><span>Написать</span></a>
+          <a class="soc soc--wa" href="https://wa.me/79211155113" target="_blank" rel="noopener"><b>WhatsApp</b><span>Написать</span></a>
+          <a class="soc soc--vb" href="https://viber.click/79211155113" target="_blank" rel="noopener"><b>Viber</b><span>Написать</span></a>
+        </div>
+        <p class="cont__hash">#паблопсков</p>
+      </div>
+
+      <div class="cont__card reveal">
+        <h3>Адрес</h3>
+        <p class="cont__addr">Псков, Западная улица, 1<br><span>1 этаж · Завеличье · парковка рядом</span></p>
+        <a class="btn btn--ghost" href="https://yandex.ru/maps/org/pablo/30460137314/" target="_blank" rel="noopener">Открыть на Яндекс Картах</a>
+        <h3 class="cont__h3">Режим работы</h3>
+        <table class="hours" id="hours">
+          <tr data-d="1"><th>Понедельник</th><td>12:00 — 00:00</td></tr>
+          <tr data-d="2"><th>Вторник</th><td>12:00 — 00:00</td></tr>
+          <tr data-d="3"><th>Среда</th><td>12:00 — 00:00</td></tr>
+          <tr data-d="4"><th>Четверг</th><td>12:00 — 00:00</td></tr>
+          <tr data-d="5"><th>Пятница</th><td>12:00 — 01:00</td></tr>
+          <tr data-d="6"><th>Суббота</th><td>12:00 — 01:00</td></tr>
+          <tr data-d="0"><th>Воскресенье</th><td>12:00 — 00:00</td></tr>
+        </table>
+      </div>
+
+      <div class="cont__card cont__card--ev reveal">
+        <h3>Событие в Пабло</h3>
+        <p>Корпоратив, день рождения, банкет или деловая встреча — соберём зал,
+           меню и трансляцию под вашу компанию.</p>
+        <ul class="cont__ev">
+          <li>Корпоратив</li><li>День рождения</li><li>Банкет</li><li>Деловая встреча</li><li>Дегустация</li>
+        </ul>
+        <a class="btn" href="#book">Обсудить событие</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="ftr">
+  <div class="wrap ftr__in">
+    <div>
+      <div class="logo__mark logo__mark--ftr">Пабло</div>
+      <p class="ftr__tag">пенное и кухня · Псков, Западная 1</p>
+    </div>
+    <nav class="ftr__nav" aria-label="Ссылки">
+      <a href="#menu">Кухня</a><a href="#bar">Барная карта</a><a href="#lunch">Деловые обеды</a><a href="#gallery">Атмосфера</a>
+      <a href="https://vk.com/pablopskov" target="_blank" rel="noopener">ВКонтакте</a>
+      <a href="https://t.me/79211155113" target="_blank" rel="noopener">Telegram</a>
+      <a href="https://yandex.ru/maps/org/pablo/30460137314/" target="_blank" rel="noopener">Яндекс Карты</a>
+      <a href="policy.html">Политика конфиденциальности</a>
+    </nav>
+    <p class="ftr__legal">
+      Цены и фото блюд — по данным меню доставки на Яндекс Картах, обновлено 25.08.2026.
+      На месте блюда и цены могут отличаться. Не является публичной офертой.<br>
+      18+ · Чрезмерное употребление алкоголя вредит вашему здоровью.
+    </p>
+  </div>
+</footer>
+
+<!-- ─────────── ВИДЖЕТ-ПОМОЩНИК ─────────── -->
+<button class="ast-fab" id="astFab" aria-label="Открыть помощника Пабло" aria-expanded="false">
+  <span class="ast-fab__ico">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 1 1-3.2-6.4"/><path d="M8 11h.01M12 11h.01M16 11h.01"/></svg>
+  </span>
+  <span class="ast-fab__txt">Спросить<br><b>Пабло</b></span>
+  <span class="ast-fab__dot" id="astDot"></span>
+</button>
+
+<div class="ast" id="ast" role="dialog" aria-modal="false" aria-label="Помощник Пабло" hidden>
+  <div class="ast__head">
+    <div class="ast__ava">П</div>
+    <div class="ast__who">
+      <b>Помощник Пабло</b>
+      <span id="astStatus">—</span>
+    </div>
+    <button class="ast__x" id="astClose" aria-label="Закрыть помощника">×</button>
+  </div>
+  <div class="ast__log" id="astLog" aria-live="polite"></div>
+  <div class="ast__chips" id="astChips"></div>
+  <form class="ast__form" id="astForm">
+    <input id="astInput" placeholder="Напишите вопрос…" aria-label="Вопрос помощнику" autocomplete="off">
+    <button type="submit" aria-label="Отправить">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+    </button>
+  </form>
+</div>
+
+<!-- лайтбокс галереи -->
+<div class="lb" id="lb" hidden>
+  <button class="lb__x" id="lbX" aria-label="Закрыть">×</button>
+  <button class="lb__nav lb__nav--p" id="lbP" aria-label="Предыдущее фото">‹</button>
+  <img id="lbImg" alt="">
+  <button class="lb__nav lb__nav--n" id="lbN" aria-label="Следующее фото">›</button>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/bar.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
