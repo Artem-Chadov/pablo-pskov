@@ -83,9 +83,18 @@ if (seen) {
 /* ───── шапка / навигация ───── */
 const hdr = $('#hdr'), nav = $('.nav'), burger = $('#burger');
 addEventListener('scroll', () => hdr.classList.toggle('is-stuck', scrollY > 40), { passive: true });
+// Закрытое меню на телефоне остаётся в порядке обхода с клавиатуры: фокус уезжает
+// под первый экран. Скрываем его для Tab через inert, а не visibility — с visibility
+// фокус на первый пункт после открытия не встаёт.
+const navMq = matchMedia('(max-width:860px)');
+function syncNavInert() { nav.inert = navMq.matches && !nav.classList.contains('is-open'); }
+syncNavInert();
+navMq.addEventListener('change', syncNavInert);
+
 burger.addEventListener('click', () => {
   const open = nav.classList.toggle('is-open');
   burger.setAttribute('aria-expanded', open);
+  syncNavInert();
   // с клавиатуры после открытия фокус уходил на кнопку брони мимо меню
   if (open) { const first = nav.querySelector('a'); if (first) first.focus({ preventScroll: true }); }
   else burger.focus({ preventScroll: true });
@@ -145,7 +154,29 @@ function render() {
     (!q || (d.t + ' ' + d.d + ' ' + d.cat).toLowerCase().includes(q)));
   grid.innerHTML = list.map(card).join('');
   $('#menuEmpty').hidden = list.length > 0;
+  closeRow();
 }
+
+// Последний ряд меню оставался с пустой клеткой: 67 блюд на четыре колонки.
+// Закрываем остаток приглашением — ряд полный, а у гостя появляется шаг дальше.
+function closeRow() {
+  const old = grid.querySelector('.dish--more');
+  if (old) old.remove();
+  const cards = grid.querySelectorAll('.dish').length;
+  if (!cards) return;
+  const cols = getComputedStyle(grid).gridTemplateColumns.split(' ').length;
+  const rest = cards % cols;
+  if (!rest) return;
+  const a = document.createElement('a');
+  a.className = 'dish dish--more';
+  a.href = 'https://vk.com/pablopskov';
+  a.target = '_blank';
+  a.rel = 'noopener';
+  a.style.gridColumn = 'span ' + (cols - rest);
+  a.innerHTML = '<b>Состав меняется</b><span>Новинки и блюда дня кухня выкладывает во ВКонтакте →</span>';
+  grid.appendChild(a);
+}
+addEventListener('resize', closeRow);
 
 tabs.addEventListener('click', e => {
   const b = e.target.closest('.tab'); if (!b) return;
