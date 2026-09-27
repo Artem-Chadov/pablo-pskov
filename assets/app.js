@@ -86,6 +86,9 @@ addEventListener('scroll', () => hdr.classList.toggle('is-stuck', scrollY > 40),
 burger.addEventListener('click', () => {
   const open = nav.classList.toggle('is-open');
   burger.setAttribute('aria-expanded', open);
+  // с клавиатуры после открытия фокус уходил на кнопку брони мимо меню
+  if (open) { const first = nav.querySelector('a'); if (first) first.focus({ preventScroll: true }); }
+  else burger.focus({ preventScroll: true });
 });
 $$('.nav a').forEach(a => a.addEventListener('click', () => {
   nav.classList.remove('is-open'); burger.setAttribute('aria-expanded', 'false');
