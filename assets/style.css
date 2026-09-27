@@ -32,8 +32,8 @@ p{margin:0 0 1em}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 ::selection{background:var(--red);color:#fff}
 :focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:4px}
-.skip{position:fixed;left:-999px;top:12px;z-index:999;background:var(--red);padding:10px 16px;border-radius:8px}
-.skip:focus{left:12px}
+.skip{position:fixed;left:12px;clip-path:inset(50%);width:1px;height:1px;overflow:hidden;white-space:nowrap;top:12px;z-index:999;background:var(--red);padding:10px 16px;border-radius:8px}
+.skip:focus{clip-path:none;width:auto;height:auto}
 .wrap{width:min(1280px,100% - var(--pad)*2);margin-inline:auto}
 
 /* ── фон ── */
