@@ -284,6 +284,16 @@ new IntersectionObserver((es, o) => es.forEach(e => {
 /* ══════════ ПОМОЩНИК ══════════ */
 const fab = $('#astFab'), ast = $('#ast'), log = $('#astLog'), chipsBox = $('#astChips');
 
+/* Пока виден первый экран, круглая кнопка помощника лежит поверх нижнего ряда
+   фактов и режет «трансляции ежедневно». Показываем её, когда герой уехал вверх. */
+const heroSec = $('.hero');
+if (heroSec && 'IntersectionObserver' in window) {
+  fab.classList.add('is-hid');
+  new IntersectionObserver(([e]) => {
+    fab.classList.toggle('is-hid', e.intersectionRatio > 0.55);
+  }, { threshold: [0, 0.55, 1] }).observe(heroSec);
+}
+
 const CHIPS_MAIN = ['Что попробовать?', 'Забронировать стол', 'Часы работы', 'Как добраться',
   'Настойки', 'Коктейли', 'Деловые обеды', 'Трансляции', 'Доставка', 'Можно с собакой?'];
 
