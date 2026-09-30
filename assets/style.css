@@ -163,7 +163,7 @@ a[href^="tel:"]{white-space:nowrap}
   text-shadow:0 30px 70px rgba(0,0,0,.6);
 }
 .hero__tag{
-  font-size:var(--p2);letter-spacing:.52em;text-transform:uppercase;
+  font-size:var(--p2);letter-spacing:.22em;text-transform:uppercase;
   color:var(--red-hi);font-weight:700;padding-left:.35em;
   animation:up 1s var(--ease) both .45s;
 }
@@ -185,6 +185,34 @@ a[href^="tel:"]{white-space:nowrap}
 .hero__scroll{position:absolute;left:50%;bottom:18px;translate:-50% 0;width:44px;height:44px;border:1.5px solid var(--line);border-radius:999px;display:grid;place-items:start center;padding-top:8px}
 .hero__scroll span{width:3px;height:8px;background:var(--red-hi);border-radius:2px;animation:sc 1.8s ease-in-out infinite}
 @keyframes sc{0%,100%{transform:translateY(0);opacity:1}60%{transform:translateY(14px);opacity:0}}
+@media (min-width:861px) and (max-height:780px){
+  .hero{padding-top:84px;padding-bottom:22px}
+  .hero__title{margin-bottom:14px}
+  .hero__actions{margin:20px 0}
+  .hero__facts li{padding:12px 18px}
+  .hero__scroll{display:none}
+}
+
+/* Бронь открывается рядом с текущим местом чтения. */
+.booking{width:min(500px,calc(100vw - 32px));max-height:92svh;overflow:auto;
+  padding:clamp(24px,4vw,36px);border:1px solid rgba(243,236,225,.22);
+  border-radius:22px;background:var(--ink-2);color:var(--paper);
+  box-shadow:0 32px 100px rgba(0,0,0,.7)}
+.booking::backdrop{background:rgba(5,4,4,.78);backdrop-filter:blur(6px)}
+.booking__close{position:absolute;top:12px;right:12px;width:44px;height:44px;
+  color:var(--paper);font-size:28px;line-height:1;border-radius:50%}
+.booking__close:hover{background:rgba(243,236,225,.12)}
+.booking__eyebrow{display:block;color:var(--red-hi);font-size:var(--p1);font-weight:800;
+  letter-spacing:.18em;text-transform:uppercase}
+.booking h2{font-family:var(--disp);font-size:clamp(28px,6vw,42px);line-height:1.1;
+  letter-spacing:-.035em;margin:18px 42px 16px 0}
+.booking p{color:var(--mut);font-size:var(--p2);line-height:1.5;margin:0 0 26px}
+.booking__actions{display:grid;gap:10px}
+.booking__actions .btn{justify-content:center}
+.booking__actions a:not(.btn){display:flex;align-items:center;min-height:48px;
+  padding:11px 16px;border:1px solid var(--line);border-radius:12px;
+  color:var(--paper);font-size:var(--p2);font-weight:700}
+.booking__actions a:not(.btn):hover{border-color:var(--red-hi);color:var(--red-hi)}
 
 /* ── возрастная заглушка ── */
 /* Оверлей поверх уже загруженного HTML, а не серверная затычка: поисковый робот
@@ -242,7 +270,6 @@ a[href^="tel:"]{white-space:nowrap}
 .feat__card:hover{transform:translateY(-5px);border-color:rgba(243,236,225,.28)}
 .feat__card h3{font-size:var(--p3);margin-bottom:10px;letter-spacing:-.015em}
 .feat__card p{color:var(--mut);font-size:var(--p2);margin:0;text-wrap:pretty}
-.feat__ico{font-size:var(--p4);display:block;margin-bottom:16px;filter:saturate(1.1)}
 .feat__card--wide{grid-column:span 2;padding:0;display:grid;grid-template-columns:1fr 1fr}
 .feat__img{overflow:hidden}
 .feat__img img{width:100%;height:100%;min-height:240px;object-fit:cover;transition:transform .8s var(--ease)}
@@ -371,6 +398,10 @@ a[href^="tel:"]{white-space:nowrap}
 .lunch__today{font-size:var(--p2);color:rgba(11,10,9,.76)}
 .lunch__today a{color:var(--red-ink);font-weight:700;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1.5px}
 .lunch__today a:hover{color:var(--ink)}
+.lunch__fallback{margin:0;color:rgba(11,10,9,.76);font-size:var(--p2);line-height:1.5}
+.lunch__links{display:flex;flex-wrap:wrap;gap:10px 20px;margin-top:18px}
+.lunch__links a{display:inline-flex;align-items:center;min-height:44px;color:var(--red-ink);font-size:var(--p2);font-weight:700;text-decoration:underline;text-underline-offset:4px}
+.lunch__links a:hover{color:var(--ink)}
 .lunch__art{position:relative;background:var(--red) url("../img/vk/vk-12.jpg?v=74c842dd") center/cover;display:grid;align-content:space-between;justify-items:center;gap:18px;padding:clamp(22px,3vw,34px) 20px;overflow:hidden;min-height:220px;text-align:center}
 .lunch__art-kick,.lunch__art-note{position:relative;margin:0;color:#fff;text-shadow:0 6px 20px rgba(0,0,0,.4)}
 .lunch__art-kick{font-size:var(--p1);letter-spacing:.24em;text-transform:uppercase;opacity:.92}
@@ -399,6 +430,7 @@ a[href^="tel:"]{white-space:nowrap}
 .rev__card footer{display:flex;flex-direction:column;gap:3px;padding-top:16px;border-top:1px solid var(--line)}
 .rev__card footer b{font-size:var(--p2)}
 .rev__card footer span{font-size:var(--p1);color:var(--mut-2)}
+.reviews__more{margin-top:24px}
 
 .score{display:grid;grid-template-columns:auto 1fr;gap:clamp(24px,5vw,64px);align-items:center;margin-top:44px;padding:clamp(26px,4vw,44px);border-radius:var(--r);border:1px solid var(--line);background:rgba(243,236,225,.035)}
 .score__big{display:flex;align-items:center;gap:18px}
@@ -413,7 +445,14 @@ a[href^="tel:"]{white-space:nowrap}
 .sbar__f{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--red),var(--amber));width:0;transition:width 1.2s var(--ease)}
 
 /* ── контакты ── */
+.visit{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:16px;align-items:stretch;margin-bottom:16px}
+.visit__map{position:relative;display:flex;flex-direction:column;min-height:520px;border-radius:var(--r);overflow:hidden;background:var(--ink-2);border:1px solid var(--line)}
+.visit__map iframe{display:block;width:100%;min-height:520px;flex:1;border:0}
+.visit__route{position:absolute;left:18px;bottom:18px;z-index:1;padding:12px 18px;border-radius:999px;background:var(--paper);color:var(--ink);font-size:var(--p2);font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.visit__route:hover{background:#fff}
+.visit__info{min-width:0}
 .cont{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;align-items:start}
+.cont--actions{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
 .cont__card{padding:clamp(26px,3vw,36px);border-radius:var(--r);border:1px solid var(--line);background:linear-gradient(165deg,rgba(243,236,225,.06),rgba(243,236,225,.015))}
 .cont__card h3{font-size:var(--p3);margin-bottom:16px}
 .cont__h3{margin-top:32px}
@@ -437,12 +476,16 @@ a[href^="tel:"]{white-space:nowrap}
 .hours th{text-align:left;font-weight:400;color:var(--mut);padding:9px 0;border-bottom:1px solid var(--line)}
 .hours td{text-align:right;padding:9px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;color:var(--mut)}
 .hours tr.is-today th,.hours tr.is-today td{color:var(--amber);font-weight:700}
-.cont__card--ev{background:linear-gradient(155deg,rgba(216,69,42,.9),rgba(140,40,24,.9));border-color:transparent}
+.cont__card--ev{display:flex;flex-direction:column;justify-content:center;
+  background:linear-gradient(155deg,rgba(216,69,42,.9),rgba(140,40,24,.9));border-color:transparent}
 .cont__card--ev p{color:rgba(255,255,255,.86);font-size:var(--p2)}
 .cont__ev{list-style:none;padding:0;margin:20px 0 26px;display:flex;flex-wrap:wrap;gap:7px}
 .cont__ev li{padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.16);font-size:var(--p1)}
 .cont__card--ev .btn{background:var(--paper);color:var(--ink);box-shadow:none}
 .cont__card--ev .btn:hover{background:#fff}
+.event__actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;margin-top:26px}
+.event__phone{display:inline-flex;align-items:center;min-height:44px;color:#fff;font-size:var(--p2);font-weight:700;text-decoration:underline;text-underline-offset:4px}
+.event__phone:hover{color:var(--paper)}
 
 /* ── подвал ── */
 .ftr{border-top:1px solid var(--line);padding:clamp(40px,6vw,70px) 0 40px;background:rgba(11,10,9,.6)}
@@ -556,6 +599,9 @@ a[href^="tel:"]{white-space:nowrap}
   .lunch{grid-template-columns:1fr}
   .lunch__art{min-height:170px;order:-1}
   .score{grid-template-columns:1fr}
+  .visit{grid-template-columns:1fr}
+  .visit__map{min-height:360px}
+  .visit__map iframe{min-height:360px}
 }
 @media(max-width:860px){
   html{scroll-padding-top:74px}
@@ -580,6 +626,9 @@ a[href^="tel:"]{white-space:nowrap}
   .barlist{columns:1}
 }
 @media(max-width:640px){
+  .visit__map{min-height:300px}
+  .visit__map iframe{min-height:300px}
+  .cont--actions{grid-template-columns:1fr}
   .feat__card--wide{padding:0}
   .feat__body{padding:22px}
   .lunch__body{padding:22px}

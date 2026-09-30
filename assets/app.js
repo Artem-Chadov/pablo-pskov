@@ -8,6 +8,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;',
 /* ───── данные ───── */
 const MENU = window.MENU || [];
 const VENUE = window.VENUE || {};
+const CONTENT = window.PABLO_CONTENT || { lunchByDate: {}, reviews: [] };
 const ALL = MENU.flatMap(c => c.items.map(i => ({ ...i, cat: c.cat })));
 const find = name => ALL.find(d => d.t === name);
 
@@ -101,7 +102,24 @@ burger.addEventListener('click', () => {
 });
 $$('.nav a').forEach(a => a.addEventListener('click', () => {
   nav.classList.remove('is-open'); burger.setAttribute('aria-expanded', 'false');
+  syncNavInert();
 }));
+
+/* Бронь с любой точки страницы открывает способы связи без прокрутки к подвалу. */
+const bookingDialog = $('#bookingDialog');
+let bookingTrigger = null;
+$$('a[href="#book"]').forEach(a => a.addEventListener('click', e => {
+  if (!bookingDialog || typeof bookingDialog.showModal !== 'function') return;
+  e.preventDefault();
+  bookingTrigger = a;
+  bookingDialog.showModal();
+  bookingDialog.querySelector('.booking__call').focus({ preventScroll: true });
+}));
+bookingDialog?.querySelector('.booking__close')?.addEventListener('click', () => bookingDialog.close());
+bookingDialog?.addEventListener('click', e => {
+  if (e.target === bookingDialog) bookingDialog.close();
+});
+bookingDialog?.addEventListener('close', () => bookingTrigger?.focus({ preventScroll: true }));
 
 /* ───── появление секций ───── */
 const io = new IntersectionObserver(es => es.forEach(e => {
@@ -135,7 +153,7 @@ tabs.innerHTML = CATS.map(c =>
 function card(d) {
   return `<article class="dish" data-name="${esc(d.t)}">
     <div class="dish__ph${d.img ? '' : ' dish__ph--none'}">
-      ${d.img ? `<img loading="lazy" src="${d.img}" alt="${esc(d.t)}">` : '<b>Пабло</b><i>пенное и кухня</i>'}
+      ${d.img ? `<img loading="lazy" src="${d.img}" alt="${esc(d.t)}">` : '<b>Пабло</b><i>гастропаб в Пскове</i>'}
       <span class="dish__cat">${esc(d.cat)}</span>
     </div>
     <div class="dish__b">
@@ -187,7 +205,7 @@ tabs.addEventListener('click', e => {
 search.addEventListener('input', () => { activeCat = 'Всё'; $$('.tab', tabs).forEach(t => t.setAttribute('aria-selected', t.dataset.cat === 'Всё')); render(); });
 clearBtn.addEventListener('click', () => { search.value = ''; render(); search.focus(); });
 render();
-$('#menuCount').textContent = ALL.length;
+
 
 /* переход к конкретному блюду */
 function gotoDish(name) {
@@ -267,19 +285,56 @@ addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') showLb(li + 1);
 });
 
-/* ───── шкалы отзывов ───── */
-// оценки Яндекс Карт. Алкогольные категории («Настойки», «Пиво») намеренно не выводим:
-// проценты одобрения по алкоголю читаются как его реклама, а она в интернете запрещена.
-const ASPECTS = [['Атмосфера', 99, 119], ['Закуски', 96, 28], ['Время ожидания', 95, 19],
-  ['Еда', 94, 232], ['Персонал', 94, 184], ['Напитки', 92, 181], ['Музыка', 91, 38], ['Интерьер', 90, 31]];
-$('#scoreBars').innerHTML = ASPECTS.map(([n, p, c]) =>
-  `<div class="sbar"><div class="sbar__t"><span>${n} · ${c}</span><b>${p}%</b></div>
-   <div class="sbar__l"><i class="sbar__f" data-p="${p}"></i></div></div>`).join('');
-new IntersectionObserver((es, o) => es.forEach(e => {
-  if (!e.isIntersecting) return;
-  $$('.sbar__f').forEach((f, i) => setTimeout(() => f.style.width = f.dataset.p + '%', i * 90));
-  o.disconnect();
-}), { threshold: .3 }).observe($('#scoreBars'));
+/* ───── обеды и отзывы: меняются в assets/content.js ───── */
+function moscowToday() {
+  const values = Object.fromEntries(new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/Moscow', year: 'numeric', month: '2-digit', day: '2-digit'
+  }).formatToParts(new Date()).filter(x => x.type !== 'literal').map(x => [x.type, x.value]));
+  const date = `${values.year}-${values.month}-${values.day}`;
+  const day = new Date(Date.UTC(+values.year, +values.month - 1, +values.day)).getUTCDay();
+  return { date, day };
+}
+
+function lunchToday() {
+  const { date, day } = moscowToday();
+  const list = CONTENT.lunchByDate?.[date];
+  return day >= 1 && day <= 5 && Array.isArray(list) && list.length ? list : null;
+}
+
+function renderLunch() {
+  const { day } = moscowToday();
+  const list = lunchToday();
+  const dayLabel = $('#lunchDay'), items = $('#lunchItems'), fallback = $('#lunchFallback');
+  if (list) {
+    dayLabel.textContent = 'Сегодня в обеде';
+    items.innerHTML = list.map(item => `<li>${esc(item)}</li>`).join('');
+    items.hidden = false;
+    fallback.hidden = true;
+  } else {
+    dayLabel.textContent = day === 0 || day === 6 ? 'Обеды по будням' : 'Состав на сегодня';
+    items.replaceChildren();
+    items.hidden = true;
+    fallback.textContent = day === 0 || day === 6
+      ? 'Следующий деловой обед — в будний день. Состав можно уточнить у команды «Пабло».'
+      : 'Точное меню дня уточните по телефону или во ВКонтакте.';
+    fallback.hidden = false;
+  }
+}
+
+function renderReviews() {
+  const target = $('#reviewsList');
+  if (!target) return;
+  target.innerHTML = (CONTENT.reviews || []).map(review => `
+    <article class="rev__card reveal">
+      <p>«${esc(review.text)}».</p>
+      <footer><b>${esc(review.author)}</b></footer>
+    </article>`).join('');
+  $$('.rev__card', target).forEach(el => io.observe(el));
+}
+
+renderLunch();
+renderReviews();
+setInterval(renderLunch, 60000);
 
 /* ══════════ ПОМОЩНИК ══════════ */
 const fab = $('#astFab'), ast = $('#ast'), log = $('#astLog'), chipsBox = $('#astChips');
@@ -295,7 +350,7 @@ if (heroSec && 'IntersectionObserver' in window) {
 }
 
 const CHIPS_MAIN = ['Что попробовать?', 'Забронировать стол', 'Часы работы', 'Как добраться',
-  'Настойки', 'Коктейли', 'Деловые обеды', 'Трансляции', 'Доставка', 'Можно с собакой?'];
+  'Деловые обеды', 'Трансляции', 'Событие в Пабло', 'Барная карта', 'Доставка', 'Можно с собакой?'];
 
 function bubble(html, who = 'bot') {
   const el = document.createElement('div');
@@ -332,7 +387,7 @@ const TAG = {
 let pick = null;
 const PICK_STEPS = [
   { q: 'С кем сегодня заходите?', opts: ['Компанией', 'Вдвоём', 'Один'] },
-  { q: 'Чего хочется?', opts: ['Мясного и сытного', 'Поострее', 'Полегче', 'Закусить пенное'] },
+  { q: 'Чего хочется?', opts: ['Мясного и сытного', 'Поострее', 'Полегче', 'Закуски на компанию'] },
   { q: 'Бюджет на блюдо?', opts: ['До 500 ₽', '500–900 ₽', 'Не важно'] },
 ];
 
@@ -340,7 +395,7 @@ function pickResult() {
   const [who, want, budget] = pick.a;
   const cap = budget === 'До 500 ₽' ? 500 : budget === '500–900 ₽' ? 900 : 1e9;
   const min = budget === '500–900 ₽' ? 500 : 0;
-  const key = { 'Мясного и сытного': 'meat', 'Поострее': 'spicy', 'Полегче': 'light', 'Закусить пенное': 'beer' }[want];
+  const key = { 'Мясного и сытного': 'meat', 'Поострее': 'spicy', 'Полегче': 'light', 'Закуски на компанию': 'beer' }[want];
   const scored = ALL
     .filter(d => d.cat !== 'Соусы' && d.p <= cap && d.p >= min)
     .map(d => {
@@ -394,20 +449,23 @@ const RULES = [
     `${paintStatus()}.<br><br>Пн–Чт — 12:00–00:00<br>Пт–Сб — 12:00–01:00<br>Вс — 12:00–00:00`,
     ['Забронировать стол', 'Как добраться', 'Деловые обеды'])],
 
-  [/где|адрес|добра|доеха|маршрут|карт|найти|парков/i, () => say(
+  [/где|адрес|добра|доеха|маршрут|на карте|на картах|найти|парков/i, () => say(
     `Псков, <b>Западная улица, 1</b> — 1 этаж, Завеличье. Парковка рядом, до остановки «Западная улица» ~280 м.
      <br><a href="${LINKS.route}" target="_blank" rel="noopener">Построить маршрут</a> · <a href="${LINKS.map}" target="_blank" rel="noopener">Открыть на картах</a>`,
     ['Часы работы', 'Забронировать стол'])],
 
   [/достав|навынос|с собой|привез|курьер/i, () => say(
     `Да: доставка и еда навынос, кофе с собой тоже. Заказ и уточнения — по телефону <a href="tel:${PHONE}">+7 921 115-51-13</a>.
-     <br>Цены в меню на сайте — как раз по меню доставки.`,
+     <br>Цены в меню на сайте могут меняться. Перед заказом уточните стоимость по телефону.`,
     ['Что попробовать?', 'Деловые обеды'])],
 
-  [/ланч|обед|бизнес|делов/i, () => say(
-    `<b>Деловые обеды</b> — каждый будний день с 13:00 до 17:00. Комплекс из трёх блюд: салат, суп и горячее с гарниром, плюс напиток на выбор — чай, вода с лимоном или пиво 0,25. <em>550 ₽</em>, около 640 г.
-     <br><br>Состав меняется каждый день, поэтому меню на сегодня — <a href="${LINKS.vk}" target="_blank" rel="noopener">во ВКонтакте</a> или по телефону <a href="tel:${PHONE}">+7 921 115-51-13</a>.`,
-    ['Заказать обед', 'Часы работы', 'Что попробовать?'])],
+  [/ланч|обед|бизнес|делов/i, () => {
+    const list = lunchToday();
+    const menu = list ? `Сегодня в обеде:<br>${list.map(item => `• ${esc(item)}`).join('<br>')}<br><br>` : '';
+    say(`<b>Деловые обеды</b> — по будням с 13:00 до 17:00. Салат, суп и горячее с гарниром; напиток входит в обед. Ориентир — 550 ₽.
+      <br><br>${menu}Состав меняется каждый день. Уточнить сегодняшние блюда можно <a href="tel:${PHONE}">по телефону</a> или <a href="${LINKS.vk}" target="_blank" rel="noopener">во ВКонтакте</a>.`,
+      ['Заказать обед', 'Часы работы', 'Что попробовать?']);
+  }],
 
   [/заказать обед/i, () => say(`Обед соберём и привезём — звоните <a href="tel:${PHONE}">+7 921 115-51-13</a> или пишите в <a href="${LINKS.tg}" target="_blank" rel="noopener">Telegram</a>.`, CHIPS_MAIN)],
 
@@ -422,13 +480,13 @@ const RULES = [
     'Летняя веранда работает в сезон — то же меню и та же атмосфера, только на свежем воздухе.',
     ['Забронировать стол', 'Что попробовать?'])],
 
-  [/закусить пенное/i, () => { pick = { i: 2, a: ['Компанией', 'Закусить пенное'] }; typing(300, () => { bubble('Закуска к пенному — святое. Бюджет?'); chips(PICK_STEPS[2].opts); }); }],
+  [/закуски на компанию/i, () => { pick = { i: 2, a: ['Компанией', 'Закуски на компанию'] }; typing(300, () => { bubble('Подберу закуски для компании. На какой бюджет рассчитывать?'); chips(PICK_STEPS[2].opts); }); }],
 
   [/настойк|наста(и|е)|огненн/i, () => say(
     `<b>Пабло настаивает</b> — настойки, 40 мл за <em>220 / 240 ₽</em>.
      Ассортимент меняется, актуальный спросите у официанта.
      <br><br>Рядом по карте: сангрита 60 ₽, чипсы «Пабло» с томатной сальсой ${find('Чипсы «Пабло» с томатной сальсой')?.p ?? 190} ₽.`,
-    ['Коктейли', 'Закусить пенное', 'Забронировать стол'])],
+    ['Коктейли', 'Закуски на компанию', 'Забронировать стол'])],
 
   [/коктейл|маргарит|негрони|спритс|палома|мескалит/i, () => say(
     `Шесть авторских:<br>${BAR.find(g => g.g === 'Коктейли').items.map(([t, d, p]) =>
@@ -448,16 +506,16 @@ const RULES = [
     `Пенное — разливное, баночное и бутылочное. Сорта меняются, поэтому пивная карта живёт на месте: спросите за стойкой или по телефону <a href="tel:${PHONE}">+7 921 115-51-13</a>.
      <br><br>Всё остальное — с ценами в разделе <a href="#bar">«Бар»</a>: текила от 410 ₽, мескаль от 540 ₽, виски от 390 ₽, вино 410 ₽ бокал, коктейли 490–580 ₽, кофе от 150 ₽.
      <br><br>И наша традиция: <em>пиво для поваров — 150 ₽</em>. Понравилась кухня — можете угостить.`,
-    ['Настойки', 'Коктейли', 'Закусить пенное'])],
+    ['Настойки', 'Коктейли', 'Закуски на компанию'])],
 
 
   [/банкет|корпоратив|день рожд|праздн|меропри|событ|компан.*человек|дегуст/i, () => say(
-    `Собираем зал под событие: корпоратив, день рождения, банкет, деловая встреча, дегустация. Подберём меню и трансляцию под вашу компанию.
-     <br><a href="tel:${PHONE}">Обсудить: +7 921 115-51-13</a>`,
+    `Планируете вечер с друзьями или коллегами? Напишите дату и число гостей — команда «Пабло» подскажет, что можно устроить.
+     <br><a href="tel:${PHONE}">Позвонить: +7 921 115-51-13</a> · <a href="${LINKS.wa}" target="_blank" rel="noopener">Написать в WhatsApp</a>`,
     ['Часы работы', 'Как добраться'])],
 
   [/чек|дорого|цен|сколько стоит|бюджет|деньг/i, () => say(
-    `Средний чек — <em>1000–1500 ₽</em> на человека. Цены выше среднего по городу: за пенное, кухню и атмосферу. В меню на сайте — все ${ALL.length} позиций с ценами и весом.`,
+    `Средний чек — ориентировочно <em>1000–1500 ₽</em> на человека. В меню на сайте показаны блюда с ценами и весом; перед заказом уточните актуальность.`,
     ['Что попробовать?', 'Деловые обеды'])],
 
   [/wi-?fi|вайфай|интернет|карт[аоу].*оплат|оплат|наличн|чаев/i, () => say(
@@ -484,7 +542,7 @@ const RULES = [
     typing(340, () => { bubble('Подберу за три вопроса.'); pickStep(); });
   }],
 
-  [/спасиб|благодар|круто|класс|отлич/i, () => say('Рад помочь. Ждём в Пабло 🍺', CHIPS_MAIN.slice(0, 5))],
+  [/спасиб|благодар|круто|класс|отлич/i, () => say('Рад помочь. Ждём в Пабло', CHIPS_MAIN.slice(0, 5))],
   [/привет|здрав|хай|добрый/i, () => say('Привет! Спрашивайте — про меню, бронь, трансляции или дорогу.', CHIPS_MAIN)],
 ];
 
