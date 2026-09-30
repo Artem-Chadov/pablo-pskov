@@ -275,6 +275,17 @@ a[href^="tel:"]{white-space:nowrap}
 .feat__img img{width:100%;height:100%;min-height:240px;object-fit:cover;transition:transform .8s var(--ease)}
 .feat__card--wide:hover .feat__img img{transform:scale(1.06)}
 .feat__body{padding:28px;display:flex;flex-direction:column;justify-content:center}
+.feat__card--photo{padding:0;display:flex;flex-direction:column}
+.feat__copy{padding:28px}
+.feat__copy .link{margin-top:18px}
+.feat__media{position:relative;margin:0;margin-top:auto;aspect-ratio:3/2;overflow:hidden;flex:none}
+.feat__media img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.feat__media--dinner img{object-position:50% 100%}
+.feat__media--match img{object-position:70% 0}
+.feat__media--veranda img{object-position:50% 42%}
+.feat__card--photo:hover .feat__media img{transform:scale(1.03)}
+.feat__credit{position:absolute;inset:auto 0 0;padding:22px 14px 10px;background:linear-gradient(transparent,rgba(11,10,9,.9));color:var(--paper);font-size:var(--p1)}
+.feat__credit a{color:inherit;text-decoration:underline;text-underline-offset:3px}
 .feat__card--accent{background:linear-gradient(155deg,var(--red),#A82F1B);border-color:transparent}
 .feat__card--accent p{color:rgba(255,255,255,.86)}
 .feat__card--accent .link{color:#fff;text-decoration:underline;text-underline-offset:4px}
@@ -641,6 +652,8 @@ a[href^="tel:"]{white-space:nowrap}
   .dish__d{display:none}
   .dish__p{font-size:var(--p3)}
   .rev__card,.cont__card,.feat__card{padding:22px}
+  .feat__card--photo{padding:0}
+  .feat__copy{padding:22px}
 }
 /* На 320 px колонка карточки — 101 px, и одно слово («морепродуктами», 115 px)
    уже её. Ниже 360 px меню идёт одной колонкой: кадр крупнее, название целиком. */
